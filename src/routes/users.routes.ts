@@ -7,6 +7,7 @@ import {
   logoutController,
   registerController,
   resendEmailVerifyController,
+  resetPasswordController,
   verifyForgotPasswordTokenController
 } from '~/controllers/users.controllers'
 import {
@@ -16,6 +17,7 @@ import {
   loginValidator,
   refreshTokenValidator,
   registerValidator,
+  resetPasswordValidator,
   verifyForgotPasswordTokenValidator
 } from '~/middlewares/users.middlewares'
 import RefreshToken from '~/models/schemas/RefreshToken.schema'
@@ -71,4 +73,17 @@ path: /users/verify-forgot-password
 body: {forgot_password_token: string}
 */
 
+usersRouter.post(
+  '/reset-password',
+  resetPasswordValidator,
+  verifyForgotPasswordTokenValidator,
+  wrapAsync(resetPasswordController)
+)
+/*
+des: reset password
+path: '/reset-password'
+method: POST
+Header: không cần, vì  ngta quên mật khẩu rồi, thì sao mà đăng nhập để có authen đc
+body: {forgot_password_token: string, password: string, confirm_password: string}
+*/
 export default usersRouter
