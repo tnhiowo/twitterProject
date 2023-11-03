@@ -15,6 +15,7 @@ import { USERS_MESSAGES } from '~/constants/messages'
 import { UserVerifyStatus } from '~/constants/enums'
 import { ErrorWithStatus } from '~/models/Errors'
 import HTTP_STATUS from '~/constants/httpStatus'
+import exp from 'constants'
 
 export const loginController = async (req: Request<ParamsDictionary, any, LoginReqBody>, res: Response) => {
   //nếu nó vào được đây thì nghĩa là đã qua được validate nghĩa là email và password đã đúng => đã đăng nhập thành công
@@ -116,4 +117,15 @@ export const resetPasswordController = async (
   //tiến hành update lại password
   const result = await usersService.resetPassword({ user_id, password })
   return res.json(result)
+}
+
+export const getMeController = async (req: Request, res: Response) => {
+  //muốn lấy profile của mình thì cần user_id của mình
+  const { user_id } = req.decoded_authorization as TokenPayload
+  //dùng user_id để lấy user từ database
+  const user = await usersService.getMe(user_id)
+  return res.json({
+    message: USERS_MESSAGES.GET_ME_SUCCESS,
+    result: user
+  })
 }
